@@ -1,0 +1,7 @@
+{
+    "files": [
+        "widget.py",
+        "form.ui",
+        "set_buttons.ui"
+    ]
+}

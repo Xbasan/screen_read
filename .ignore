@@ -1,0 +1,12 @@
+test_file/
+__pycache__/
+.qtcreator/Python_3_13_0venv
+icon/
+temporary_files/
+dist/
+build/
+*.ui
+*.user
+*.db
+ui_*
+
