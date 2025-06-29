@@ -1,47 +1,51 @@
 # -*- coding: utf-8 -*-
 
-# Form generated from reading UI file 'set_buttons.ui'
-#
-# Created by: Qt User Interface Compiler version 6.9.1
-#
-# WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+## Form generated from reading UI file 'set_buttons.ui'
+##
+## Created by: Qt User Interface Compiler version 6.9.1
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PySide6.QtCore import (
-    QCoreApplication, QMetaObject,
-    QRect, QSize, Qt)
-from PySide6.QtGui import (QCursor, QIcon,)
-from PySide6.QtWidgets import (
-    QHBoxLayout, QPushButton, QSizePolicy,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSizePolicy,
     QSpacerItem, QWidget)
-
 
 class Ui_widgetButtonTop(object):
     def setupUi(self, widgetButtonTop):
         if not widgetButtonTop.objectName():
             widgetButtonTop.setObjectName(u"widgetButtonTop")
         widgetButtonTop.resize(531, 284)
-        widgetButtonTop.setStyleSheet(u"background-color: rgb(30, 33, 36);\n"
-                                      "border-radius:12%;")
+        widgetButtonTop.setStyleSheet(u"QPushButton::hover#start_stop_button\n"
+"{\n"
+"background-color: rgb(25, 25, 25);\n"
+"}")
         self.widget = QWidget(widgetButtonTop)
         self.widget.setObjectName(u"widget")
         self.widget.setGeometry(QRect(130, 120, 262, 51))
+        self.widget.setStyleSheet(u"background-color: rgb(30, 33, 36);                        \n"
+"border-radius:12%;")
         self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.copuButton = QPushButton(self.widget)
         self.copuButton.setObjectName(u"copuButton")
         self.copuButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.copuButton.setStyleSheet(u"")
         icon = QIcon()
-        icon.addFile(u"/home/khamzat/py_project/screen_read/icon/copi.svg",
-                     QSize(),
-                     QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u"icon/copi.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.copuButton.setIcon(icon)
         self.copuButton.setIconSize(QSize(32, 32))
 
         self.horizontalLayout.addWidget(self.copuButton)
 
-        self.horizontalSpacer = QSpacerItem(40, 20,
-                                            QSizePolicy.Policy.Expanding,
-                                            QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
@@ -50,31 +54,37 @@ class Ui_widgetButtonTop(object):
         self.translateButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.translateButton.setStyleSheet(u"")
         icon1 = QIcon()
-        icon1.addFile(u"/home/khamzat/py_project/screen_read/icon/translate.svg",
-                      QSize(),
-                      QIcon.Mode.Normal,
-                      QIcon.State.Off)
+        icon1.addFile(u"icon/translate.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.translateButton.setIcon(icon1)
         self.translateButton.setIconSize(QSize(32, 32))
 
         self.horizontalLayout.addWidget(self.translateButton)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20,
-                                              QSizePolicy.Policy.Expanding,
-                                              QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+        self.gemini = QPushButton(self.widget)
+        self.gemini.setObjectName(u"gemini")
+        self.gemini.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.gemini.setIconSize(QSize(32, 32))
+
+        self.horizontalLayout.addWidget(self.gemini)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_3)
 
         self.exitButton = QPushButton(self.widget)
         self.exitButton.setObjectName(u"exitButton")
         self.exitButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         icon2 = QIcon()
-        icon2.addFile(u"/home/khamzat/py_project/screen_read/icon/exit.svg",
-                      QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u"icon/exit.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.exitButton.setIcon(icon2)
         self.exitButton.setIconSize(QSize(32, 32))
 
         self.horizontalLayout.addWidget(self.exitButton)
+
 
         self.retranslateUi(widgetButtonTop)
 
@@ -98,6 +108,7 @@ class Ui_widgetButtonTop(object):
         self.translateButton.setToolTip(QCoreApplication.translate("widgetButtonTop", u"<html><head/><body><p align=\"center\">Translate</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.translateButton.setText("")
+        self.gemini.setText("")
 #if QT_CONFIG(tooltip)
         self.exitButton.setToolTip(QCoreApplication.translate("widgetButtonTop", u"<html><head/><body><p align=\"center\">Exir</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
