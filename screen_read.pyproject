@@ -1,7 +1,8 @@
 {
     "files": [
-        "widget.py",
-        "form.ui",
-        "set_buttons.ui"
+        "main_widget.py",
+        "ui/form.ui",
+        "ui/set_buttons.ui",
+        "ui/gemini.ui"
     ]
 }

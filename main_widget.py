@@ -49,7 +49,6 @@ class Ai_widget(QDialog, Ui_widget_Gemini):
     def __init__(self, promt: str):
         super().__init__()
         self.setupUi(self)
-
         res_ai_text, res_id = gemini(text=promt)
         self.textEdit.setMarkdown(res_ai_text)
 
@@ -72,7 +71,10 @@ class Widget(QWidget, Ui_Widget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint)
+
+        # Закомментируй для того чтобы экран сохраняется как в момент запуска
         self.setAttribute(Qt.WA_TranslucentBackground, True)
+
         self.setupUi(self)
         self.showFullScreen()
         self.start_x = 0
@@ -94,7 +96,6 @@ class Widget(QWidget, Ui_Widget):
 
     def copy_button_press(self, event):
         clipboard = QApplication.clipboard()
-        print(self.labal.selectedText())
         text = self.labal.text()
         clipboard.setText(text)
 

@@ -1,8 +1,6 @@
 import requests
 from API_K import GEMINI_API
-
-URL_IMAGE = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-URL_TEXT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+from url import GEMEMI_URL_IMAGE, GEMINI_URL_TEXT
 
 he = {
     "Content-Type": "application/json",
@@ -10,7 +8,10 @@ he = {
 }
 
 
-def gemini(text: str) -> str:
+def gemini(text: str) -> list:
+    """
+        Выполняет запросы к Gemini
+    """
     payload = {
         "contents": [
             {
@@ -27,7 +28,33 @@ def gemini(text: str) -> str:
             }
         }
     }
-    response = requests.post(URL_TEXT, json=payload, headers=he)
+    response = requests.post(GEMINI_URL_TEXT, json=payload, headers=he)
+
+    res_text = (response.json()
+                .get("candidates")[0]
+                ["content"]
+                ["parts"][0]
+                ["text"])
+
+    return res_text, response.json().get("responseId")
+
+
+def gemini_image(im_b64, prompt="Что это") -> list:
+    payload = {
+            "contents": [{
+                "parts": [
+                    {
+                        "inline_data": {
+                            "mime_type": "image/jpeg",
+                            "data": f"{im_b64}"
+                        }
+                    },
+                    {"text": f"{prompt}"},
+                ]}
+            ]
+        }
+
+    response = requests.post(GEMEMI_URL_IMAGE, payload, headers=he)
 
     res_text = (response.json()
                 .get("candidates")[0]
