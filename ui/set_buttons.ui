@@ -24,8 +24,8 @@ background-color: rgb(25, 25, 25);
     <rect>
      <x>130</x>
      <y>120</y>
-     <width>262</width>
-     <height>51</height>
+     <width>260</width>
+     <height>54</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -35,6 +35,12 @@ border-radius:12%;</string>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QPushButton" name="copuButton">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>36</height>
+       </size>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -49,7 +55,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copi&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">background-color:rgb(70, 77, 86);
+</string>
       </property>
       <property name="text">
        <string/>
@@ -60,27 +67,20 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
       <property name="iconSize">
        <size>
-        <width>32</width>
-        <height>32</height>
+        <width>26</width>
+        <height>26</height>
        </size>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+     <widget class="QPushButton" name="translateButton">
+      <property name="minimumSize">
        <size>
-        <width>40</width>
-        <height>20</height>
+        <width>0</width>
+        <height>36</height>
        </size>
       </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QPushButton" name="translateButton">
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -88,7 +88,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Translate&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">background-color:rgb(70, 77, 86);
+</string>
       </property>
       <property name="text">
        <string/>
@@ -99,61 +100,55 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
       <property name="iconSize">
        <size>
-        <width>32</width>
-        <height>32</height>
+        <width>26</width>
+        <height>26</height>
        </size>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+     <widget class="QPushButton" name="gemini">
+      <property name="minimumSize">
        <size>
-        <width>40</width>
-        <height>20</height>
+        <width>0</width>
+        <height>36</height>
        </size>
       </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QPushButton" name="gemini">
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(70, 77, 86);
+</string>
       </property>
       <property name="text">
        <string/>
       </property>
       <property name="iconSize">
        <size>
-        <width>32</width>
-        <height>32</height>
+        <width>26</width>
+        <height>26</height>
        </size>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+     <widget class="QPushButton" name="exitButton">
+      <property name="minimumSize">
        <size>
-        <width>40</width>
-        <height>20</height>
+        <width>0</width>
+        <height>36</height>
        </size>
       </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QPushButton" name="exitButton">
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Exir&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(70, 77, 86);
+</string>
       </property>
       <property name="text">
        <string/>
@@ -164,8 +159,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
       <property name="iconSize">
        <size>
-        <width>32</width>
-        <height>32</height>
+        <width>26</width>
+        <height>26</height>
        </size>
       </property>
      </widget>

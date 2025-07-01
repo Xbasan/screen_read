@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QSizePolicy, QTextEdit,
+from PySide6.QtWidgets import (QApplication, QSizePolicy, QTextEdit, QVBoxLayout,
     QWidget)
 
 class Ui_widget_Gemini(object):
@@ -23,22 +23,28 @@ class Ui_widget_Gemini(object):
         if not widget_Gemini.objectName():
             widget_Gemini.setObjectName(u"widget_Gemini")
         widget_Gemini.resize(935, 847)
+        font = QFont()
+        font.setFamilies([u"Noto Naskh Arabic"])
+        font.setPointSize(12)
+        widget_Gemini.setFont(font)
         widget_Gemini.setStyleSheet(u"margin:20pt;")
-        self.gridLayout = QGridLayout(widget_Gemini)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalLayout = QVBoxLayout(widget_Gemini)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.textEdit = QTextEdit(widget_Gemini)
         self.textEdit.setObjectName(u"textEdit")
-        font = QFont()
-        font.setPointSize(12)
-        self.textEdit.setFont(font)
+        font1 = QFont()
+        font1.setPointSize(12)
+        font1.setItalic(True)
+        self.textEdit.setFont(font1)
         self.textEdit.setMouseTracking(True)
         self.textEdit.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
-"padding:10px;\n"
+"padding:8px;\n"
+"margin: 8px;\n"
 "border-radius: 12%;")
         self.textEdit.setUndoRedoEnabled(True)
         self.textEdit.setReadOnly(True)
 
-        self.gridLayout.addWidget(self.textEdit, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.textEdit)
 
 
         self.retranslateUi(widget_Gemini)
@@ -54,7 +60,7 @@ class Ui_widget_Gemini(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"justify\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:12pt; font-weight:400; font-style:italic;\">\n"
+"<p align=\"justify\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:normal;\"><br /></p></body></html>", None))
     # retranslateUi
 

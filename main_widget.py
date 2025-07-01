@@ -3,7 +3,7 @@ import sys
 
 from easyocr import Reader
 from PIL import ImageGrab
-import numpy
+from numpy import array
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -26,31 +26,35 @@ from ui.ui_gemini import Ui_widget_Gemini
 from translate import g_translate
 from gemini import gemini
 
+
 HOME_PATH = "/home/khamzat/py_project/screen_read"
 DEFOLT_MESSAG = "Сорянь но я там текста невижу"
 DEFOLT_PROMPT = "Ответь только олддно сообшение что запрос не дошол"
 
 
 def screan(x, y, w, h) -> list:
-    im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
-    im_np = numpy.array(im)
+    if w > 12 and h > 12:
+        im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
+        im_np = array(im)
 
-    reader = Reader(['en', 'ru'])
-    try:
-        text = reader.readtext(im_np)
-    except SystemError:
-        return DEFOLT_MESSAG
+        reader = Reader(['en', 'ru'])
+        try:
+            text = reader.readtext(im_np)
+        except SystemError:
+            return DEFOLT_MESSAG
 
-    res = [i[1] for i in text]
-    return res if res else DEFOLT_MESSAG
+        res = [i[1] for i in text]
+        return res if res else DEFOLT_MESSAG
+    else:
+        return "Выдели хоть чтото"
 
 
 class Ai_widget(QDialog, Ui_widget_Gemini):
     def __init__(self, promt: str):
         super().__init__()
         self.setupUi(self)
-        res_ai_text, res_id = gemini(text=promt)
-        self.textEdit.setMarkdown(res_ai_text)
+        self.res_ai_text, res_id = gemini(text=promt)
+        self.textEdit.setMarkdown(self.res_ai_text)
 
 
 class ButtonTop(QWidget, Ui_widgetButtonTop):
@@ -101,9 +105,8 @@ class Widget(QWidget, Ui_Widget):
 
     def gemini_button_press(self, event):
         promt = self.labal.text()
-        print(promt)
         self.dialog_ai = Ai_widget(promt)
-        self.dialog_ai.setWindowTitle(f"Gemini : {promt}")
+        self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
         self.dialog_ai.exec()
 
     def mouseMoveEvent(self, event):
@@ -174,10 +177,17 @@ class Widget(QWidget, Ui_Widget):
             self.but = self.bl.widget
             self.but.setParent(self)
             self.but.setStyleSheet("""
-                           background-color: rgb(30, 33, 36);
-                           border-radius:5%;""")
+                                   background-color: rgb(30, 33, 36);
+                                   border-radius:15%;
+                                   """)
 
-            self.but.move(self.start_x+(width/2)-131, self.start_y-54)
+            but_x = self.start_x+(width/2)-131
+            if self.start_y-54 > 0:
+                but_y = self.start_y - 54
+            else:
+                but_y = self.start_y + height
+
+            self.but.move(but_x, but_y)
             self.but.show()
             self.but.raise_()
 

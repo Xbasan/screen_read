@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSizePolicy,
-    QSpacerItem, QWidget)
+    QWidget)
 
 class Ui_widgetButtonTop(object):
     def setupUi(self, widgetButtonTop):
@@ -29,59 +29,57 @@ class Ui_widgetButtonTop(object):
 "}")
         self.widget = QWidget(widgetButtonTop)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(130, 120, 262, 51))
+        self.widget.setGeometry(QRect(130, 120, 260, 54))
         self.widget.setStyleSheet(u"background-color: rgb(30, 33, 36);                        \n"
 "border-radius:12%;")
         self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.copuButton = QPushButton(self.widget)
         self.copuButton.setObjectName(u"copuButton")
+        self.copuButton.setMinimumSize(QSize(0, 36))
         self.copuButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.copuButton.setStyleSheet(u"")
+        self.copuButton.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
+"")
         icon = QIcon()
         icon.addFile(u"icon/copi.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.copuButton.setIcon(icon)
-        self.copuButton.setIconSize(QSize(32, 32))
+        self.copuButton.setIconSize(QSize(26, 26))
 
         self.horizontalLayout.addWidget(self.copuButton)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
         self.translateButton = QPushButton(self.widget)
         self.translateButton.setObjectName(u"translateButton")
+        self.translateButton.setMinimumSize(QSize(0, 36))
         self.translateButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.translateButton.setStyleSheet(u"")
+        self.translateButton.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
+"")
         icon1 = QIcon()
         icon1.addFile(u"icon/translate.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.translateButton.setIcon(icon1)
-        self.translateButton.setIconSize(QSize(32, 32))
+        self.translateButton.setIconSize(QSize(26, 26))
 
         self.horizontalLayout.addWidget(self.translateButton)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
-
         self.gemini = QPushButton(self.widget)
         self.gemini.setObjectName(u"gemini")
+        self.gemini.setMinimumSize(QSize(0, 36))
         self.gemini.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.gemini.setIconSize(QSize(32, 32))
+        self.gemini.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
+"")
+        self.gemini.setIconSize(QSize(26, 26))
 
         self.horizontalLayout.addWidget(self.gemini)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
-
         self.exitButton = QPushButton(self.widget)
         self.exitButton.setObjectName(u"exitButton")
+        self.exitButton.setMinimumSize(QSize(0, 36))
         self.exitButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.exitButton.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
+"")
         icon2 = QIcon()
         icon2.addFile(u"icon/exit.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.exitButton.setIcon(icon2)
-        self.exitButton.setIconSize(QSize(32, 32))
+        self.exitButton.setIconSize(QSize(26, 26))
 
         self.horizontalLayout.addWidget(self.exitButton)
 
