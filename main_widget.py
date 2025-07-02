@@ -1,9 +1,11 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
+from io import BytesIO
 from easyocr import Reader
 from PIL import ImageGrab
 from numpy import array
+import base64
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -22,9 +24,10 @@ from PySide6.QtGui import (
 from ui.ui_form import Ui_Widget
 from ui.ui_set_buttons import Ui_widgetButtonTop
 from ui.ui_gemini import Ui_widget_Gemini
+from ui.ui_input_dialog import Ui_widget_input
 
 from translate import g_translate
-from gemini import gemini
+from gemini import gemini, gemini_image
 
 
 HOME_PATH = "/home/khamzat/py_project/screen_read"
@@ -35,8 +38,12 @@ DEFOLT_PROMPT = "Ответь только олддно сообшение чт�
 def screan(x, y, w, h) -> list:
     if w > 12 and h > 12:
         im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
-        im_np = array(im)
 
+        bt = BytesIO()
+        im.save(bt, format="PNG")
+        b64 = base64.b64encode(bt.getvalue()).decode("utf-8")
+
+        im_np = array(im)
         reader = Reader(['en', 'ru'])
         try:
             text = reader.readtext(im_np)
@@ -44,17 +51,33 @@ def screan(x, y, w, h) -> list:
             return DEFOLT_MESSAG
 
         res = [i[1] for i in text]
-        return res if res else DEFOLT_MESSAG
+        return (res if res else DEFOLT_MESSAG), b64
     else:
-        return "Выдели хоть чтото"
+        return "Выдели хоть чтото", 0
 
 
 class Ai_widget(QDialog, Ui_widget_Gemini):
-    def __init__(self, promt: str):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.res_ai_text, res_id = gemini(text=promt)
-        self.textEdit.setMarkdown(self.res_ai_text)
+
+
+class Ai_Image(QWidget, Ui_widget_input):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.b64 = ""
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.pushButton.setIcon(QIcon(f"{HOME_PATH}/icon/gemini_image.svg"))
+        self.pushButton.clicked.connect(self.ai_run_button_press)
+
+    def ai_run_button_press(self, event):
+        promt = self.textEdit.toPlainText()
+        res_ai_text, res_id = gemini_image(self.b64, promt)
+        self.dialog_ai = Ai_widget()
+        self.dialog_ai.textEdit.setMarkdown(res_ai_text)
+        self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
+        self.dialog_ai.exec()
 
 
 class ButtonTop(QWidget, Ui_widgetButtonTop):
@@ -84,7 +107,7 @@ class Widget(QWidget, Ui_Widget):
         self.start_x = 0
         self.start_y = 0
         self.final_x = 0
-        self.fianl_y = 0
+        self.final_y = 0
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key.Key_Escape:
@@ -104,10 +127,22 @@ class Widget(QWidget, Ui_Widget):
         clipboard.setText(text)
 
     def gemini_button_press(self, event):
-        promt = self.labal.text()
-        self.dialog_ai = Ai_widget(promt)
-        self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
-        self.dialog_ai.exec()
+        # promt = self.labal.text()
+        # res_ai_text, res_id = gemini(promt)
+        # self.dialog_ai = Ai_widget()
+        # self.dialog_ai.textEdit.setMarkdown(res_ai_text)
+        # self.dialog_ai.setWindowTitle(f"Gemini : {promt}")
+        # self.dialog_ai.exec()
+
+        imd = Ai_Image(self)
+        imd.b64 = self.b64
+
+        x = self.start_x+(self.width/2)-230
+        if x < 0:
+            x = 0
+        imd.move(x, self.final_y)
+        imd.show()
+        imd.raise_()
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton:
@@ -144,19 +179,25 @@ class Widget(QWidget, Ui_Widget):
             pos = event.globalPosition().toPoint()
             self.final_x = pos.x()
             self.final_y = pos.y()
-            width = abs(self.start_x - self.final_x)
-            height = abs(self.start_y - self.final_y)
+            self.width = abs(self.start_x - self.final_x)
+            self.height = abs(self.start_y - self.final_y)
             self.start_x = min(self.final_x, self.start_x)
             self.start_y = min(self.final_y, self.start_y)
 
-            self.text = screan(self.start_x, self.start_y, width, height)
+            self.text, self.b64 = screan(self.start_x,
+                                         self.start_y,
+                                         self.width,
+                                         self.height)
 
             font = QFont("Noto Sans", 12)
 
             self.labal = QLabel(self)
             self.labal.setText(" ".join(self.text))
-            self.labal.setGeometry(self.start_x, self.start_y, width, height)
-            self.labal.setMinimumSize(width, height)
+            self.labal.setGeometry(self.start_x,
+                                   self.start_y,
+                                   self.width,
+                                   self.height)
+            self.labal.setMinimumSize(self.width, self.height)
             self.labal.setStyleSheet("""
                                      color:#000000;
                                      background: rgba(255,255,255,80%);
@@ -181,11 +222,13 @@ class Widget(QWidget, Ui_Widget):
                                    border-radius:15%;
                                    """)
 
-            but_x = self.start_x+(width/2)-131
+            but_x = self.start_x+(self.width/2)-131
+            but_x = 0 if but_x < 0 else but_x
+            print(but_x)
             if self.start_y-54 > 0:
                 but_y = self.start_y - 54
             else:
-                but_y = self.start_y + height
+                but_y = self.start_y + self.height
 
             self.but.move(but_x, but_y)
             self.but.show()

@@ -51,7 +51,7 @@ def gemini(text: str) -> list:
 
 def gemini_image(im_b64, prompt="Что это") -> list:
     """
-        Выполняет запросы к Gemini связанные с текстам
+        Выполняет запросы к Gemini связанные с изображения
     """
     payload = {
             "contents": [{
@@ -67,7 +67,7 @@ def gemini_image(im_b64, prompt="Что это") -> list:
             ]
         }
 
-    response = post(GEMEMI_URL_IMAGE, payload, headers=he)
+    response = post(GEMEMI_URL_IMAGE, json=payload, headers=he)
 
     res_text = (response.json()
                 .get("candidates")[0]

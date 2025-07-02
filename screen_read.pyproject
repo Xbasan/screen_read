@@ -3,6 +3,7 @@
         "main_widget.py",
         "ui/form.ui",
         "ui/set_buttons.ui",
-        "ui/gemini.ui"
+        "ui/gemini.ui",
+        "ui/input_dialog.ui"
     ]
 }

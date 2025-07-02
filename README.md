@@ -16,3 +16,15 @@ pip install -r requirements.txt
 python main_widget.py
 ```
 
+Неоходиныме файлы это "API_K.py" имеюший следуюшее вид
+
+- GEMINI_API - Главное API для работы функций свчзанных с AI
+- TRANSLATE_API_KEY и folder_id - если хочешь использовать Yandex для перивода текста
+
+```Python
+TRANSLATE_API_KEY = "<Тут API-KEY от Yndex Translate>"
+folder_id = "<ID директории Yndex Translate>"
+
+GEMINI_API = "<Тут API-KEY из Google Ai Studio>"
+```
+
