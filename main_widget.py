@@ -133,16 +133,21 @@ class Widget(QWidget, Ui_Widget):
         # self.dialog_ai.textEdit.setMarkdown(res_ai_text)
         # self.dialog_ai.setWindowTitle(f"Gemini : {promt}")
         # self.dialog_ai.exec()
+        self.imd = Ai_Image(self)
+        self.imd.b64 = self.b64
 
-        imd = Ai_Image(self)
-        imd.b64 = self.b64
-
-        x = self.start_x+(self.width/2)-230
+        x = self.start_x+(self.w/2)-230
         if x < 0:
             x = 0
-        imd.move(x, self.final_y)
-        imd.show()
-        imd.raise_()
+
+        y = self.final_y
+
+        if y >= self.height() - 64:
+            y = self.height() - 64
+
+        self.imd.move(x, y)
+        self.imd.show()
+        self.imd.raise_()
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton:
@@ -158,9 +163,14 @@ class Widget(QWidget, Ui_Widget):
             try:
                 self.bl.setParent(None)
                 self.bl.deleteLater()
+
                 self.but.setParent(None)
                 self.but.deleteLater()
+
                 self.labal.setParent(None)
+
+                self.imd.setParent(None)
+                self.imd.deleteLater()
             except AttributeError:
                 pass
             finally:
@@ -179,15 +189,15 @@ class Widget(QWidget, Ui_Widget):
             pos = event.globalPosition().toPoint()
             self.final_x = pos.x()
             self.final_y = pos.y()
-            self.width = abs(self.start_x - self.final_x)
-            self.height = abs(self.start_y - self.final_y)
+            self.w = abs(self.start_x - self.final_x)
+            self.h = abs(self.start_y - self.final_y)
             self.start_x = min(self.final_x, self.start_x)
             self.start_y = min(self.final_y, self.start_y)
 
             self.text, self.b64 = screan(self.start_x,
                                          self.start_y,
-                                         self.width,
-                                         self.height)
+                                         self.w,
+                                         self.h)
 
             font = QFont("Noto Sans", 12)
 
@@ -195,12 +205,12 @@ class Widget(QWidget, Ui_Widget):
             self.labal.setText(" ".join(self.text))
             self.labal.setGeometry(self.start_x,
                                    self.start_y,
-                                   self.width,
-                                   self.height)
-            self.labal.setMinimumSize(self.width, self.height)
+                                   self.w,
+                                   self.h)
+            self.labal.setMinimumSize(self.w, self.h)
             self.labal.setStyleSheet("""
                                      color:#000000;
-                                     background: rgba(255,255,255,80%);
+                                     background: rgb(255,255,255);
                                      border-radius: 6%;
                                      padding:1%;
                                      """)
@@ -222,13 +232,16 @@ class Widget(QWidget, Ui_Widget):
                                    border-radius:15%;
                                    """)
 
-            but_x = self.start_x+(self.width/2)-131
+            but_x = self.start_x+(self.w/2)-131
             but_x = 0 if but_x < 0 else but_x
-            print(but_x)
-            if self.start_y-54 > 0:
-                but_y = self.start_y - 54
+
+            if self.start_y-62 > 0:
+                but_y = self.start_y - 62
             else:
-                but_y = self.start_y + self.height
+                but_y = self.start_y + self.h + 8
+
+            if but_y > self.height():
+                but_y = 8
 
             self.but.move(but_x, but_y)
             self.but.show()

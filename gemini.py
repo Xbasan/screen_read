@@ -39,12 +39,16 @@ def gemini(text: str) -> list:
     try:
         response = post(GEMINI_URL_TEXT, json=payload, headers=he, timeout=20)
 
+        if response.status_code != 200:
+            return f"Включич VPN {response.json()}", response.status_code
+
         res_text = (response.json()
                     .get("candidates")[0]
                     ["content"]
                     ["parts"][0]
                     ["text"])
         return res_text, response.json().get("responseId")
+
     except (exceptions.ConnectionError, exceptions.Timeout):
         return "Вайнах телеком снова инет отрубил", 1
 
@@ -66,13 +70,19 @@ def gemini_image(im_b64, prompt="Что это") -> list:
                 ]}
             ]
         }
+    try:
+        response = post(GEMEMI_URL_IMAGE, json=payload, headers=he, timeout=30)
 
-    response = post(GEMEMI_URL_IMAGE, json=payload, headers=he)
+        if response.status_code != 200:
+            return f"Включич VPN {response.json()}", response.status_code
 
-    res_text = (response.json()
-                .get("candidates")[0]
-                ["content"]
-                ["parts"][0]
-                ["text"])
+        res_text = (response.json()
+                    .get("candidates")[0]
+                    ["content"]
+                    ["parts"][0]
+                    ["text"])
 
-    return res_text, response.json().get("responseId")
+        return res_text, response.json().get("responseId")
+
+    except (exceptions.ConnectionError, exceptions.Timeout):
+        return "Вайнах телеком снова инет отрубил", 1
