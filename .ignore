@@ -9,4 +9,5 @@ build/
 *.user
 *.db
 ui_*
+requirements.txt
 

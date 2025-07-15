@@ -2,7 +2,6 @@
 import sys
 
 from io import BytesIO
-from easyocr import Reader
 from PIL import ImageGrab
 from numpy import array
 import base64
@@ -27,15 +26,21 @@ from ui.ui_gemini import Ui_widget_Gemini
 from ui.ui_input_dialog import Ui_widget_input
 
 from translate import g_translate
-from gemini import gemini, gemini_image
+from gemini import Gemini
 
 
 HOME_PATH = "/home/khamzat/py_project/screen_read"
+USER_NAME = "Xamz_pok"
 DEFOLT_MESSAG = "Сорянь но я там текста невижу"
 DEFOLT_PROMPT = "Ответь только олддно сообшение что запрос не дошол"
 
+GEMINI = Gemini()
+
+res_ai_text = ""
+
 
 def screan(x, y, w, h) -> list:
+    from easyocr import Reader
     if w > 12 and h > 12:
         im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
 
@@ -44,9 +49,9 @@ def screan(x, y, w, h) -> list:
         b64 = base64.b64encode(bt.getvalue()).decode("utf-8")
 
         im_np = array(im)
-        reader = Reader(['en', 'ru'])
+        reader = Reader(['en', 'ru'], detector="dbnet18")
         try:
-            text = reader.readtext(im_np)
+            text = reader.readtext(im_np, batch_size=5)
         except SystemError:
             return DEFOLT_MESSAG
 
@@ -61,6 +66,20 @@ class Ai_widget(QDialog, Ui_widget_Gemini):
         super().__init__()
         self.setupUi(self)
 
+        self.run_ia_button.setIcon(QIcon(f"{HOME_PATH}/icon/gemini_image.svg"))
+        self.run_ia_button.clicked.connect(self.ai_run_button_press)
+
+    def ai_run_button_press(self, event):
+        prompt = self.promt_textEdit.toPlainText()
+
+        global res_ai_text
+        res_ai_text += f"""\
+## {USER_NAME.rjust(40)}",
+{prompt}
+## GEMINI
+{GEMINI.gemini(prompt)}"""
+        self.textEdit.setMarkdown(res_ai_text)
+
 
 class Ai_Image(QWidget, Ui_widget_input):
     def __init__(self, parent=None):
@@ -73,7 +92,15 @@ class Ai_Image(QWidget, Ui_widget_input):
 
     def ai_run_button_press(self, event):
         promt = self.textEdit.toPlainText()
-        res_ai_text, res_id = gemini_image(self.b64, promt)
+
+        global res_ai_text
+        res_ai_text += f"""\
+## {USER_NAME.rjust(40)}
+{promt}
+## GEMINI
+{GEMINI.gemini_image(self.b64, promt)}
+"""
+
         self.dialog_ai = Ai_widget()
         self.dialog_ai.textEdit.setMarkdown(res_ai_text)
         self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
@@ -140,7 +167,9 @@ class Widget(QWidget, Ui_Widget):
         if x < 0:
             x = 0
 
-        y = self.final_y
+        y = (self.final_y
+             if self.final_y > self.start_y
+             else self.final_y + self.h)
 
         if y >= self.height() - 64:
             y = self.height() - 64

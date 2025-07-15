@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QSizePolicy, QTextEdit, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QSizePolicy,
+    QTextEdit, QVBoxLayout, QWidget)
 
 class Ui_widget_Gemini(object):
     def setupUi(self, widget_Gemini):
@@ -46,6 +46,42 @@ class Ui_widget_Gemini(object):
 
         self.verticalLayout.addWidget(self.textEdit)
 
+        self.widget = QWidget(widget_Gemini)
+        self.widget.setObjectName(u"widget")
+        self.widget.setMinimumSize(QSize(0, 46))
+        self.widget.setMaximumSize(QSize(16777215, 64))
+        self.widget.setStyleSheet(u"background-color:rgb(70, 77, 86);\n"
+"margin: 8px;\n"
+"border-radius: 12%;")
+        self.horizontalLayout = QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.promt_textEdit = QTextEdit(self.widget)
+        self.promt_textEdit.setObjectName(u"promt_textEdit")
+        self.promt_textEdit.setMinimumSize(QSize(0, 44))
+        self.promt_textEdit.setMaximumSize(QSize(16777215, 46))
+        font2 = QFont()
+        font2.setPointSize(12)
+        self.promt_textEdit.setFont(font2)
+
+        self.horizontalLayout.addWidget(self.promt_textEdit)
+
+        self.run_ia_button = QPushButton(self.widget)
+        self.run_ia_button.setObjectName(u"run_ia_button")
+        self.run_ia_button.setMinimumSize(QSize(0, 40))
+        font3 = QFont()
+        font3.setPointSize(14)
+        self.run_ia_button.setFont(font3)
+        self.run_ia_button.setStyleSheet(u"padding: 8px;")
+        icon = QIcon()
+        icon.addFile(u"../icon/gemini_image.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.run_ia_button.setIcon(icon)
+        self.run_ia_button.setIconSize(QSize(32, 32))
+
+        self.horizontalLayout.addWidget(self.run_ia_button)
+
+
+        self.verticalLayout.addWidget(self.widget)
+
 
         self.retranslateUi(widget_Gemini)
 
@@ -62,5 +98,6 @@ class Ui_widget_Gemini(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:12pt; font-weight:400; font-style:italic;\">\n"
 "<p align=\"justify\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:normal;\"><br /></p></body></html>", None))
+        self.run_ia_button.setText("")
     # retranslateUi
 
