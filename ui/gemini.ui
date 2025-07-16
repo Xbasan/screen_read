@@ -112,6 +112,9 @@ border-radius: 12%;</string>
           <pointsize>14</pointsize>
          </font>
         </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="styleSheet">
          <string notr="true">padding: 8px;</string>
         </property>

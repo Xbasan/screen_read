@@ -40,25 +40,27 @@ res_ai_text = ""
 
 
 def screan(x, y, w, h) -> list:
-    from easyocr import Reader
     if w > 12 and h > 12:
         im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
 
         bt = BytesIO()
         im.save(bt, format="PNG")
         b64 = base64.b64encode(bt.getvalue()).decode("utf-8")
-
         im_np = array(im)
-        reader = Reader(['en', 'ru'], detector="dbnet18")
-        try:
-            text = reader.readtext(im_np, batch_size=5)
-        except SystemError:
-            return DEFOLT_MESSAG
-
-        res = [i[1] for i in text]
-        return (res if res else DEFOLT_MESSAG), b64
+        return im_np, b64
     else:
         return "Выдели хоть чтото", 0
+
+
+def read_text(im_np) -> str:
+    from easyocr import Reader
+    reader = Reader(['en', 'ru'], detector="dbnet18")
+    try:
+        text = reader.readtext(im_np, batch_size=5)
+    except SystemError:
+        return DEFOLT_MESSAG
+    res = [i[1] for i in text]
+    return (res if res else DEFOLT_MESSAG)
 
 
 class Ai_widget(QDialog, Ui_widget_Gemini):
@@ -141,6 +143,29 @@ class Widget(QWidget, Ui_Widget):
             QApplication.quit()
 
     def translat_button_press(self, event):
+        self.text = read_text(self.im_np)
+
+        read_text(self.im_np)
+        font = QFont("Noto Sans", 12)
+        self.labal = QLabel(self)
+        self.labal.setText(" ".join(self.text))
+        self.labal.setGeometry(self.start_x,
+                               self.start_y,
+                               self.w,
+                               self.h)
+        self.labal.setMinimumSize(self.w, self.h)
+        self.labal.setStyleSheet("""
+                                 color:#000000;
+                                 background: rgb(255,255,255);
+                                 border-radius: 6%;
+                                 padding:1%;
+                                 """)
+        self.labal.setFont(font)
+        self.labal.setWordWrap(True)
+        self.labal.show()
+        self.labal.raise_()
+        self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.labal.adjustSize()
         if 1:
             self.labal.setText(str(g_translate(self.text)))
             self.labal.adjustSize()
@@ -149,17 +174,35 @@ class Widget(QWidget, Ui_Widget):
             self.labal.adjustSize()
 
     def copy_button_press(self, event):
+        self.text = read_text(self.im_np)
+
+        read_text(self.im_np)
+        font = QFont("Noto Sans", 12)
+        self.labal = QLabel(self)
+        self.labal.setText(" ".join(self.text))
+        self.labal.setGeometry(self.start_x,
+                               self.start_y,
+                               self.w,
+                               self.h)
+        self.labal.setMinimumSize(self.w, self.h)
+        self.labal.setStyleSheet("""
+                                 color:#000000;
+                                 background: rgb(255,255,255);
+                                 border-radius: 6%;
+                                 padding:1%;
+                                 """)
+        self.labal.setFont(font)
+        self.labal.setWordWrap(True)
+        self.labal.show()
+        self.labal.raise_()
+        self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.labal.adjustSize()
+
         clipboard = QApplication.clipboard()
         text = self.labal.text()
         clipboard.setText(text)
 
     def gemini_button_press(self, event):
-        # promt = self.labal.text()
-        # res_ai_text, res_id = gemini(promt)
-        # self.dialog_ai = Ai_widget()
-        # self.dialog_ai.textEdit.setMarkdown(res_ai_text)
-        # self.dialog_ai.setWindowTitle(f"Gemini : {promt}")
-        # self.dialog_ai.exec()
         self.imd = Ai_Image(self)
         self.imd.b64 = self.b64
 
@@ -223,32 +266,10 @@ class Widget(QWidget, Ui_Widget):
             self.start_x = min(self.final_x, self.start_x)
             self.start_y = min(self.final_y, self.start_y)
 
-            self.text, self.b64 = screan(self.start_x,
-                                         self.start_y,
-                                         self.w,
-                                         self.h)
-
-            font = QFont("Noto Sans", 12)
-
-            self.labal = QLabel(self)
-            self.labal.setText(" ".join(self.text))
-            self.labal.setGeometry(self.start_x,
-                                   self.start_y,
-                                   self.w,
-                                   self.h)
-            self.labal.setMinimumSize(self.w, self.h)
-            self.labal.setStyleSheet("""
-                                     color:#000000;
-                                     background: rgb(255,255,255);
-                                     border-radius: 6%;
-                                     padding:1%;
-                                     """)
-            self.labal.setFont(font)
-            self.labal.setWordWrap(True)
-            self.labal.show()
-            self.labal.raise_()
-            self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
-            self.labal.adjustSize()
+            self.im_np, self.b64 = screan(self.start_x,
+                                          self.start_y,
+                                          self.w,
+                                          self.h)
 
             self.bl = ButtonTop(self)
             self.bl.translateButton.clicked.connect(self.translat_button_press)
