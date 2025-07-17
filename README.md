@@ -2,9 +2,7 @@
 
 Это приложение предоставляет удобный инструмент для захвата текста с экрана, его перевода и обработки с помощью искусственного интеллекта. Основные возможности:
 
-Посмотрите это видео:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/qrER4tVXTiM" 
-title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+[![Демо-видео](https://img.youtube.com/vi/qrER4tVXTiM/0.jpg)](https://youtu.be/qrER4tVXTiM)
 
 - Захват выделенной области экрана;
 - Распознавание текста с помощью OCR (EasyOCR);
