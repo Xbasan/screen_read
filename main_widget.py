@@ -137,6 +137,7 @@ class Widget(QWidget, Ui_Widget):
         self.start_y = 0
         self.final_x = 0
         self.final_y = 0
+        self.labal = QLabel(self)
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key.Key_Escape:
@@ -147,7 +148,6 @@ class Widget(QWidget, Ui_Widget):
 
         read_text(self.im_np)
         font = QFont("Noto Sans", 12)
-        self.labal = QLabel(self)
         self.labal.setText(" ".join(self.text))
         self.labal.setGeometry(self.start_x,
                                self.start_y,
@@ -178,7 +178,6 @@ class Widget(QWidget, Ui_Widget):
 
         read_text(self.im_np)
         font = QFont("Noto Sans", 12)
-        self.labal = QLabel(self)
         self.labal.setText(" ".join(self.text))
         self.labal.setGeometry(self.start_x,
                                self.start_y,
@@ -233,18 +232,23 @@ class Widget(QWidget, Ui_Widget):
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
             try:
-                self.bl.setParent(None)
-                self.bl.deleteLater()
+                widgets_to_clean = [
+                    ('bl',    True),
+                    ('but',   True),
+                    ('imd',   True),
+                    ('label', False)
+                ]
 
-                self.but.setParent(None)
-                self.but.deleteLater()
-
-                self.labal.setParent(None)
-
-                self.imd.setParent(None)
-                self.imd.deleteLater()
-            except AttributeError:
-                pass
+                for attr_name, should_delete in widgets_to_clean:
+                    widget = getattr(self, attr_name, None)
+                    if widget:
+                        widget.setParent(None) 
+                        if should_delete:
+                            widget.deleteLater()
+                self.bl = None
+                self.but = None
+                self.imd = None
+                self.label = None
             finally:
                 self.trase_widget.setGeometry(self.start_x, self.start_y, 0, 0)
                 self.trase_widget.setStyleSheet("""
