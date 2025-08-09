@@ -30,7 +30,7 @@ def g_translate(texts: list, language="ru") -> str:
             res = response.json()
             return res[0][0][0]
         else:
-            return response
+            return str(response.content)
     except exceptions.Timeout:
         return "Привышена время ожидания"
 

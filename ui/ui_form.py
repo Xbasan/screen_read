@@ -22,7 +22,6 @@ class Ui_Widget(object):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
         Widget.resize(1920, 1080)
-        Widget.setStyleSheet(u"background-color: rgba(255, 255, 255, 0);")
         self.start_labal = QLabel(Widget)
         self.start_labal.setObjectName(u"start_labal")
         self.start_labal.setGeometry(QRect(755, 505, 410, 70))

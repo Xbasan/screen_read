@@ -18,7 +18,10 @@ from PySide6.QtGui import (
     QFont,
     QMouseEvent,
     QIcon,
+    QPixmap,
+    QImage
 )
+from torch import hann_window
 #     pyside6-uic form.ui -o ui_form.py
 from ui.ui_form import Ui_Widget
 from ui.ui_set_buttons import Ui_widgetButtonTop
@@ -27,7 +30,6 @@ from ui.ui_input_dialog import Ui_widget_input
 
 from translate import g_translate
 from gemini import Gemini
-
 
 HOME_PATH = "/home/khamzat/py_project/screen_read"
 USER_NAME = "Xamz_pok"
@@ -38,21 +40,24 @@ GEMINI = Gemini()
 
 res_ai_text = ""
 
+WIDTH = 0
+HEIGHT = 0
 
-def screan(x, y, w, h) -> list:
+
+def screan(x, y, w, h):
     if w > 12 and h > 12:
         im = ImageGrab.grab(bbox=(x, y, x+w, y+h))
-
+        
         bt = BytesIO()
         im.save(bt, format="PNG")
         b64 = base64.b64encode(bt.getvalue()).decode("utf-8")
         im_np = array(im)
         return im_np, b64
     else:
-        return "Выдели хоть чтото", 0
+        return "Выди хот чтото", 0
 
 
-def read_text(im_np) -> str:
+def read_text(im_np):
     from easyocr import Reader
     reader = Reader(['en', 'ru'], detector="dbnet18")
     try:
@@ -126,10 +131,6 @@ class ButtonTop(QWidget, Ui_widgetButtonTop):
 class Widget(QWidget, Ui_Widget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowFlags(Qt.FramelessWindowHint)
-
-        # Закомментируй для того чтобы экран сохраняется как в момент запуска
-        self.setAttribute(Qt.WA_TranslucentBackground, True)
 
         self.setupUi(self)
         self.showFullScreen()
@@ -147,8 +148,8 @@ class Widget(QWidget, Ui_Widget):
         self.text = read_text(self.im_np)
 
         read_text(self.im_np)
+
         font = QFont("Noto Sans", 12)
-        self.labal.setText(" ".join(self.text))
         self.labal.setGeometry(self.start_x,
                                self.start_y,
                                self.w,
@@ -168,9 +169,6 @@ class Widget(QWidget, Ui_Widget):
         self.labal.adjustSize()
         if 1:
             self.labal.setText(str(g_translate(self.text)))
-            self.labal.adjustSize()
-        elif 0:
-            self.labal.setText(self.text)
             self.labal.adjustSize()
 
     def copy_button_press(self, event):
@@ -203,7 +201,7 @@ class Widget(QWidget, Ui_Widget):
 
     def gemini_button_press(self, event):
         self.imd = Ai_Image(self)
-        self.imd.b64 = self.b64
+        self.imd.b64 = str(self.b64)
 
         x = self.start_x+(self.w/2)-230
         if x < 0:
@@ -228,6 +226,7 @@ class Widget(QWidget, Ui_Widget):
             w = abs(cur.x() - self.start_x)
             h = abs(cur.y() - self.start_y)
             self.trase_widget.setGeometry(x, y, w, h)
+            self.trase_widget.raise_()
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
@@ -297,13 +296,30 @@ class Widget(QWidget, Ui_Widget):
             if but_y > self.height():
                 but_y = 8
 
-            self.but.move(but_x, but_y)
+            self.but.move(int(but_x), int(but_y))
             self.but.show()
             self.but.raise_()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
+    im = ImageGrab.grab()
+
+    im_bytes = im.tobytes("raw", "RGBA")
+    WIDTH = im.width
+    HEIGHT = im.height
+    
+    q_image = QImage(im_bytes, WIDTH, HEIGHT, QImage.Format_RGBA8888)
+    
     app = QApplication(sys.argv)
-    widget = Widget()
-    widget.show()
+
+    pixmap = QPixmap.fromImage(q_image) 
+    window = Widget()
+    window.setFixedSize(WIDTH, HEIGHT)
+
+    background_label = QLabel(window)
+    background_label.setPixmap(pixmap)
+    background_label.setGeometry(0, 0, WIDTH, HEIGHT)
+    background_label.show()
+            
+    window.show()
     sys.exit(app.exec())
