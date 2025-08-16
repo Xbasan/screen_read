@@ -1,5 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import sys
+import asyncio
 
 from io import BytesIO
 from PIL import ImageGrab
@@ -28,8 +29,9 @@ from ui.ui_set_buttons import Ui_widgetButtonTop
 from ui.ui_gemini import Ui_widget_Gemini
 from ui.ui_input_dialog import Ui_widget_input
 
-from translate import g_translate
-from gemini import Gemini
+from translate import asunc_g_translate # g_translate
+# from gemini import Gemini
+from asunc_gemini import Gemini
 
 HOME_PATH = "/home/khamzat/py_project/screen_read"
 USER_NAME = "Xamz_pok"
@@ -79,12 +81,13 @@ class Ai_widget(QDialog, Ui_widget_Gemini):
     def ai_run_button_press(self, event):
         prompt = self.promt_textEdit.toPlainText()
 
+        text_gemini = asyncio.run(GEMINI.gemini_text(prompt))
         global res_ai_text
         res_ai_text += f"""\
 ## {USER_NAME.rjust(40)}",
 {prompt}
 ## GEMINI
-{GEMINI.gemini(prompt)}"""
+{text_gemini}"""
         self.textEdit.setMarkdown(res_ai_text)
 
 
@@ -100,12 +103,13 @@ class Ai_Image(QWidget, Ui_widget_input):
     def ai_run_button_press(self, event):
         promt = self.textEdit.toPlainText()
 
+        text_gemini = asyncio.run(GEMINI.gemini_image(self.b64, promt))
         global res_ai_text
         res_ai_text += f"""\
 ## {USER_NAME.rjust(40)}
 {promt}
 ## GEMINI
-{GEMINI.gemini_image(self.b64, promt)}
+{text_gemini}
 """
 
         self.dialog_ai = Ai_widget()
@@ -168,7 +172,8 @@ class Widget(QWidget, Ui_Widget):
         self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.labal.adjustSize()
         if 1:
-            self.labal.setText(str(g_translate(self.text)))
+            text = asyncio.run(asunc_g_translate(self.text))
+            self.labal.setText(str(text))
             self.labal.adjustSize()
 
     def copy_button_press(self, event):

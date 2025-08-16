@@ -48,5 +48,7 @@ class Ui_Widget(object):
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
         self.start_labal.setText(QCoreApplication.translate("Widget", u"Click and drag to make a selection", None))
+
+        self.start_labal.raise_()
     # retranslateUi
 

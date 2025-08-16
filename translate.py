@@ -7,6 +7,7 @@
 """
 
 from requests import post, get, exceptions
+import aiohttp
 from urllib.parse import quote
 
 from API_K import TRANSLATE_API_KEY, folder_id
@@ -16,6 +17,27 @@ headers = {
     "Content-Type": "application/json",
     "Authorization": "Api-Key {0}".format(TRANSLATE_API_KEY),
 }
+
+async def asunc_g_translate(texts, language="ru") -> str:
+    """
+        Делает перивод текста через Google Translate
+    """
+    prompt = quote(" ".join(texts), safe="")
+
+    params = {
+        "client": "gtx",
+        "sl": "auto",
+        "tl": language,
+        "dt": "t",
+        "q": prompt
+    }
+    async with aiohttp.ClientSession() as session:
+        async with session.get(G_TRANSLATE_URL, params=params) as resp:
+            if resp.status == 200:
+                res = await resp.json()
+                return str(res[0][0][0])
+            else:
+                return str(resp.content)
 
 
 def g_translate(texts: list, language="ru") -> str:
