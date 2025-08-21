@@ -22,6 +22,7 @@ class Ui_Widget(object):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
         Widget.resize(1920, 1080)
+        Widget.setStyleSheet(u"background-color: rgba(255, 255, 255, 0);")
         self.start_labal = QLabel(Widget)
         self.start_labal.setObjectName(u"start_labal")
         self.start_labal.setGeometry(QRect(755, 505, 410, 70))
@@ -34,11 +35,17 @@ class Ui_Widget(object):
         self.start_labal.setFont(font)
         self.start_labal.setStyleSheet(u"background-color: rgb(30, 33, 36);\n"
 "border-radius:12%;")
+        self.start_labal.setLineWidth(2)
         self.start_labal.setTextFormat(Qt.TextFormat.MarkdownText)
         self.start_labal.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.start_labal.setIndent(2)
         self.trase_widget = QWidget(Widget)
         self.trase_widget.setObjectName(u"trase_widget")
         self.trase_widget.setGeometry(QRect(0, 0, 0, 0))
+        self.bagraunImage = QLabel(Widget)
+        self.bagraunImage.setObjectName(u"bagraunImage")
+        self.bagraunImage.setGeometry(QRect(1, 1, 1920, 1080))
+        self.bagraunImage.setCursor(QCursor(Qt.CursorShape.CrossCursor))
 
         self.retranslateUi(Widget)
 
@@ -48,7 +55,6 @@ class Ui_Widget(object):
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
         self.start_labal.setText(QCoreApplication.translate("Widget", u"Click and drag to make a selection", None))
-
-        self.start_labal.raise_()
+        self.bagraunImage.setText("")
     # retranslateUi
 

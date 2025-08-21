@@ -321,10 +321,9 @@ if __name__ == "__main__":
     window = Widget()
     window.setFixedSize(WIDTH, HEIGHT)
 
-    background_label = QLabel(window)
-    background_label.setPixmap(pixmap)
-    background_label.setGeometry(0, 0, WIDTH, HEIGHT)
-    background_label.show()
-            
+    window.bagraunImage.setPixmap(pixmap)
+    window.bagraunImage.setGeometry(0, 0, WIDTH, HEIGHT)
+    window.bagraunImage.lower()
+           
     window.show()
     sys.exit(app.exec())
