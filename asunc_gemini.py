@@ -19,11 +19,10 @@ he = {
 }
 
 class Gemini():
-    def __init__(self) -> None:
-        self.histori = {
+    histori = {
             "contents": []
         }
-        self.contents = []
+    contents = []
 
     async def gemini_text(self, text: str) -> list:
         """
@@ -69,13 +68,13 @@ class Gemini():
                                  ]})
                         return res_text
                     else:
-                        return ["Вайнах телеком снова инет отрубил"]
+                        return ["Вайнах телеком снова инет отрубил", resp.content]
             except asyncio.TimeoutError:
                 return ["Вайнах телеком снова инет отрубил"]
 
 
 
-    async def gemini_image(self, im_b64, prompt="Что это") -> str:
+    async def gemini_image(self, im_b64, prompt="Что это") -> list:
         """
             Makes requests to Gemini related images
         """
@@ -123,7 +122,7 @@ class Gemini():
                                  ]})
                         return res_text
                     else:
-                        return "Вайнах телеком снова инет отрубил"
+                        return ["Вайнах телеком снова инет отрубил", resp.content]
             except asyncio.TimeoutError:
-                return "Вайнах телеком снова инет отрубил"
+                return ["Вайнах телеком снова инет отрубил", "11"]
 
