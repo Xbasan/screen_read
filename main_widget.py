@@ -22,7 +22,6 @@ from PySide6.QtGui import (
     QPixmap,
     QImage
 )
-from torch import hann_window
 #     pyside6-uic form.ui -o ui_form.py
 from ui.ui_form import Ui_Widget
 from ui.ui_set_buttons import Ui_widgetButtonTop
@@ -77,6 +76,7 @@ class Ai_widget(QDialog, Ui_widget_Gemini):
 
         self.run_ia_button.setIcon(QIcon(f"{HOME_PATH}/icon/gemini_image.svg"))
         self.run_ia_button.clicked.connect(self.ai_run_button_press)
+        self.promt_textEdit.setFocus()
 
     def ai_run_button_press(self, event):
         prompt = self.promt_textEdit.toPlainText()
@@ -117,6 +117,11 @@ class Ai_Image(QWidget, Ui_widget_input):
         self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
         self.dialog_ai.exec()
 
+    def keyPressEvent(self, event: QKeyEvent, /) -> None:
+        if event.key() == Qt.Key.Key_Control:
+            self.ai_run_button_press(event)
+        elif event.key() == Qt.Key.Key_Escape:
+            QApplication.quit()
 
 class ButtonTop(QWidget, Ui_widgetButtonTop):
     def __init__(self, parent=None):
@@ -144,42 +149,7 @@ class Widget(QWidget, Ui_Widget):
         self.final_y = 0
         self.labal = QLabel(self)
 
-    def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key.Key_Escape:
-            QApplication.quit()
-
-    def translat_button_press(self, event):
-        self.text = read_text(self.im_np)
-
-        read_text(self.im_np)
-
-        font = QFont("Noto Sans", 12)
-        self.labal.setGeometry(self.start_x,
-                               self.start_y,
-                               self.w,
-                               self.h)
-        self.labal.setMinimumSize(self.w, self.h)
-        self.labal.setStyleSheet("""
-                                 color:#000000;
-                                 background: rgb(255,255,255);
-                                 border-radius: 6%;
-                                 padding:1%;
-                                 """)
-        self.labal.setFont(font)
-        self.labal.setWordWrap(True)
-        self.labal.show()
-        self.labal.raise_()
-        self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.labal.adjustSize()
-        if 1:
-            text = asyncio.run(asunc_g_translate(self.text))
-            self.labal.setText(str(text))
-            self.labal.adjustSize()
-
-    def copy_button_press(self, event):
-        self.text = read_text(self.im_np)
-
-        read_text(self.im_np)
+    def l_run(self):
         font = QFont("Noto Sans", 12)
         self.labal.setText(" ".join(self.text))
         self.labal.setGeometry(self.start_x,
@@ -197,6 +167,26 @@ class Widget(QWidget, Ui_Widget):
         self.labal.setWordWrap(True)
         self.labal.show()
         self.labal.raise_()
+        
+ 
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() == Qt.Key.Key_Escape:
+            QApplication.quit()
+
+    def translat_button_press(self, event):
+        self.text = read_text(self.im_np)
+
+        read_text(self.im_np)
+        self.l_run()
+        text = asyncio.run(asunc_g_translate(self.text))
+        self.labal.setText(str(text))
+        self.labal.adjustSize()
+
+    def copy_button_press(self, event):
+        self.text = read_text(self.im_np)
+
+        read_text(self.im_np)
+        self.l_run()
         self.labal.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.labal.adjustSize()
 
@@ -206,9 +196,10 @@ class Widget(QWidget, Ui_Widget):
 
     def gemini_button_press(self, event):
         self.imd = Ai_Image(self)
+        self.imd.textEdit.setFocus()
         self.imd.b64 = str(self.b64)
 
-        x = self.start_x+(self.w/2)-230
+        x = int(self.start_x+(self.w/2)-230)
         if x < 0:
             x = 0
 
