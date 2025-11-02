@@ -4,8 +4,10 @@ import asyncio
 
 from io import BytesIO
 from PIL import ImageGrab
+from attr import astuple
 from numpy import array
 import base64
+import qasync
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -80,8 +82,10 @@ class Ai_widget(QDialog, Ui_widget_Gemini):
 
     def ai_run_button_press(self, event):
         prompt = self.promt_textEdit.toPlainText()
+        asyncio.ensure_future(self.async_run_ai(prompt))
 
-        text_gemini = asyncio.run(GEMINI.gemini_text(prompt))
+    async def async_run_ai(self, prompt):
+        text_gemini = await GEMINI.gemini_text(prompt)
         global res_ai_text
         res_ai_text += f"""\
 ## {USER_NAME.rjust(40)}",
@@ -102,20 +106,22 @@ class Ai_Image(QWidget, Ui_widget_input):
 
     def ai_run_button_press(self, event):
         promt = self.textEdit.toPlainText()
-
-        text_gemini = asyncio.run(GEMINI.gemini_image(self.b64, promt))
+        asyncio.ensure_future(self.aysnc_run_ai(prompt=promt))
+        
+    async def aysnc_run_ai(self, prompt):
+        text_gemini = await GEMINI.gemini_image(self.b64, prompt)
         global res_ai_text
         res_ai_text += f"""\
 ## {USER_NAME.rjust(40)}
-{promt}
+{prompt}
 ## GEMINI
 {text_gemini}
 """
 
         self.dialog_ai = Ai_widget()
         self.dialog_ai.textEdit.setMarkdown(res_ai_text)
-        self.dialog_ai.setWindowTitle(f"Gemini : {promt:^20}")
-        self.dialog_ai.exec()
+        self.dialog_ai.setWindowTitle(f"Gemini : {prompt:^20}")
+        self.dialog_ai.show()
 
     def keyPressEvent(self, event: QKeyEvent, /) -> None:
         if event.key() == Qt.Key.Key_Control:
@@ -297,7 +303,7 @@ class Widget(QWidget, Ui_Widget):
             self.but.raise_()
 
 
-if __name__ == "__main__":    
+def main() -> None:
     im = ImageGrab.grab()
 
     im_bytes = im.tobytes("raw", "RGBA")
@@ -305,8 +311,10 @@ if __name__ == "__main__":
     HEIGHT = im.height
     
     q_image = QImage(im_bytes, WIDTH, HEIGHT, QImage.Format_RGBA8888)
-    
+
     app = QApplication(sys.argv)
+    loop = qasync.QEventLoop(app)
+    asyncio.set_event_loop(loop)
 
     pixmap = QPixmap.fromImage(q_image) 
     window = Widget()
@@ -317,4 +325,9 @@ if __name__ == "__main__":
     window.bagraunImage.lower()
            
     window.show()
-    sys.exit(app.exec())
+    with loop:
+        loop.run_forever()
+    # sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main()
