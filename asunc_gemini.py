@@ -7,6 +7,7 @@
 """
 
 import asyncio
+import qasync
 from typing import AnyStr
 import aiohttp
 from requests import post, exceptions
@@ -24,12 +25,13 @@ class Gemini():
         }
     contents = []
 
-    async def gemini_text(self, text: str) -> list:
+    @staticmethod
+    async def gemini_text(text: str) -> list:
         """
             Makes requests to Gemini related to texts
         """
 
-        self.contents.append({
+        Gemini.contents.append({
                              "role": "user",
                              "parts": [
                                  {
@@ -38,7 +40,7 @@ class Gemini():
                              ]})
 
         payload = {
-            "contents": self.contents,
+            "contents": Gemini.contents,
             "generationConfig": {
                 "thinkingConfig": {
                     "thinkingBudget": 0
@@ -59,7 +61,7 @@ class Gemini():
 
                         res_text = (res["candidates"][0]["content"]["parts"][0]["text"])                        
                          
-                        self.contents.append({
+                        Gemini.contents.append({
                                  "role": "model",
                                  "parts": [
                                      {
@@ -73,13 +75,13 @@ class Gemini():
                 return ["Вайнах телеком снова инет отрубил"]
 
 
-
-    async def gemini_image(self, im_b64, prompt="Что это") -> list:
+    @staticmethod
+    async def gemini_image(im_b64, prompt="Что это") -> list:
         """
             Makes requests to Gemini related images
         """
 
-        self.contents.append({
+        Gemini.contents.append({
                              "role": "user",
                              "parts": [
                                  {
@@ -92,7 +94,7 @@ class Gemini():
                              ]})
 
         payload = {
-                "contents": self.contents,
+                "contents": Gemini.contents,
                 "generationConfig": {
                     "thinkingConfig": {
                         "thinkingBudget": 0
@@ -113,7 +115,7 @@ class Gemini():
 
                         res_text = (res["candidates"][0]["content"]["parts"][0]["text"])                        
                          
-                        self.contents.append({
+                        Gemini.contents.append({
                                  "role": "model",
                                  "parts": [
                                      {
